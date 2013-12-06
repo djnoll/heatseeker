@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html>
+<head> 
+  	<link rel="stylesheet" type="text/css" href="widget.css" />
+    <link href='http://api.tiles.mapbox.com/mapbox.js/v1.0.0/mapbox.css' rel='stylesheet' />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.ie.css" />
+<![endif]-->
+
+	<script src='http://api.tiles.mapbox.com/mapbox.js/v1.0.0/mapbox.js'></script>
+    
+	<script type="text/javascript" src="vkboardsc.js"></script>
+    <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript" src="master.js"></script>
+    <script type="text/javascript" src="slideSet.js"></script>
+    <script type="text/javascript" src="sorter.js"></script>
+    <script type="text/javascript" src="export.js"></script>
+    <script type="text/javascript" src="mastergrid.js"></script>
+    <script type="text/javascript" src="process.js"></script>
+ 
+
+<title>Daniel Noll Thesis - MCSDSS</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	
+
+	<style>
+		 #map { position:absolute; top:2.5em; bottom:0; width:100%; }
+		.info {
+			padding: 6px 8px;
+			font: 14px/16px Arial, Helvetica, sans-serif;
+			background: white;
+			background: rgba(255,255,255,0.8);
+			box-shadow: 0 0 15px rgba(0,0,0,0.2);
+			border-radius: 5px;
+		}
+		.info h4 {
+			margin: 0 0 5px;
+			color: #777;
+		}
+
+		.legend {
+			text-align: left;
+			line-height: 18px;
+			color: #555;
+		}
+		.legend i {
+			width: 18px;
+			height: 18px;
+			float: left;
+			margin-right: 8px;
+			opacity: 0.7;
+		}
+	</style>
+</head>
+<body>
+<div id ="topBar" class="top">
+<span id ="s1" class= "bars"> SELECT</span>
+<span id="s2" class="bars"> CHART </span>
+<span id="s4" class="bars">EXPORT</span>
+<span id ="s5" class="bars">RESET</span><hr>
+</div>
+
+<link rel='stylesheet' href='leaflet.draw.css' />
+<!--[if lte IE 8]>
+  <link rel="stylesheet" href="/mapbox.js/assets/leaflet.draw.ie.css" />
+<![endif]-->
+<script src='leaflet.draw.js'></script>
+
+<div id='map'></div>
+<script>
+var map = L.map('map').setView([43.5, -111], 8);
+
+L.control.layers({
+    'Base Map': L.mapbox.tileLayer('examples.map-zgrqqx0w').addTo(map),
+    'Grey Map': L.mapbox.tileLayer('dnoll.g7i1h04g')
+}, {
+    'Land Use': L.mapbox.tileLayer('dnoll.nkkxzuxr'),
+    'Raod Access': L.mapbox.tileLayer('dnoll.qohnz5mi'),
+	'Transmission Lines': L.mapbox.tileLayer('dnoll.7xzp8pvi'),
+	'Fault Zones': L.mapbox.tileLayer('dnoll.qga7zaor')
+}).addTo(map);
+
+  var featureGroup = L.featureGroup().addTo(map);
+  
+  var drawControl = new L.Control.Draw({
+    edit: {
+      featureGroup: featureGroup
+    }
+  }).addTo(map);
+
+  map.on('draw:created', function(e) {
+      featureGroup.addLayer(e.layer);
+  });
+</script>
+<!--DIV CONTAINING CHART-->
+<div id="chartCont">
+
+<div id="chartDrag" class="dragBar">
+<input type="button" id="chartFade" class = "hideIt" value="HIDE">
+</div>
+<hr>
+<div id="chart">
+<h3>No Chart Currently Exists</h3>
+</div>
+</div>
+<!--FOR EXPORTING-->
+<div id="export" >
+
+<div id="exportDrag" class="dragBar">
+<input type="button" id="exportFade" class = "hideIt" value="HIDE">
+</div>
+<hr>
+<p id="ExMessage"></p>
+<input type = "text" id="textBox" class="keyboardInput" ><br>
+<div id="keyboard"></div>
+<input type="button" id="exSend" value="SEND">
+<input type="button" id="exClear" value="CLEAR">
+
+</div>
+
+<!--SEARCH SELECTION-->
+<div id = "dashB">
+<div id="dashDrag" class="dragBar">
+<input type="button" id="selectFade" class="hideIt" value="HIDE">
+</div>
+<hr>
+<!--FOR TOGGLING LAYERS-->
+<div id="radio"></div>
+<!--FOR THE SLIDERS-->
+<div id="slideDiv">
+<input type="button" value="MAKE CHART" id ="doCalc" class="butCalc"><hr>
+<div id ="masterSet">
+<h3>RELATIVE WEIGHT OF THE TWO SETS</h3>
+</div>
+
+<div id="slide1Div"><h4>SET ONE: ADJUST  WEIGHT WITHIN THE SET</h4></div>  
+<div id="slide2Div"><h4>SET TWO: ADJUST  WEIGHT WITHIN THE SET</h4></div> 
+
+
+</div>
+</div>
+<!--LEGEND DIV-->
+<div id ="legendWrapper">
+
+<div id="legendDrag" class="dragBar">
+<input type="button" id="legendFade" class="hideIt" value="HIDE">
+</div>
+
+<div id="Legend">
+</div>
+</div>
+
+<script type="text/javascript">
+   var _usersnapconfig = {
+       apiKey: '1d4650f1-8120-4a7b-9bea-f98fae1eab20',
+       valign: 'bottom',
+       halign: 'right',
+       tools: ["pen", "highlight", "note"],
+       lang: 'en',
+       commentBox: true,
+       emailBox: true
+   }; 
+   (function() {
+       var s = document.createElement('script');
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = '//api.usersnap.com/usersnap.js';
+       var x = document.getElementsByTagName('head')[0];
+       x.appendChild(s);
+   })();
+</script>
+</body>
+</html>
